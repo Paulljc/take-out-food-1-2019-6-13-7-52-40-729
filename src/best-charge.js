@@ -1,10 +1,13 @@
+const loadAllItems = require('./items');
+const loadPromotions = require('./promotions');
+
 function bestCharge(selectedItems) {
 
   const foodInfos = [];
 
   //获取所有菜品及优惠数据
-  const allFood = loadAllItems();
-  const allPromotions = loadPromotions();
+  const allFood = loadAllItems.loadAllItems();
+  const allPromotions = loadPromotions.loadPromotions();
 
   //获取所有半价菜品数据
   let allHalfPriceFood = getAllHalfPriceFood(allPromotions);
@@ -83,3 +86,5 @@ function createOrder(foodInfos){
   receipt += `===================================\n`;
   return receipt;
 }
+
+module.exports = { bestCharge }
