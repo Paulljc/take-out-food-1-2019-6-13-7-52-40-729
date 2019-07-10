@@ -1,31 +1,35 @@
 function bestCharge(selectedItems) {
 
-  //定义用到的变量
-  let totalPrice = 0;
-  let orderDiscount1 = 0;
-  let orderDiscount2 = 0;
-  const halfPriceFood = [];
-  let allHalfPriceFood = [];
-  const FoodInfos = [];
+  const foodInfos = [];
 
   //获取所有菜品及优惠数据
   const allFood = loadAllItems();
   const allPromotions = loadPromotions();
 
   //获取所有半价菜品数据
-  allHalfPriceFood = allPromotions.filter((value) => {
+  let allHalfPriceFood = getAllHalfPriceFood(allPromotions);
+  //获取输入的菜品数据
+  getFoodInfos(selectedItems, foodInfos, allFood, allHalfPriceFood);
+  //生成订单
+  let order = createOrder(foodInfos)
+  return order;
+}
+
+function getAllHalfPriceFood(allPromotions){
+  let allHalfPriceFood = allPromotions.filter((value) => {
     if(value.type = '指定菜品半价'){
       return value.items
     }
   })
+  return allHalfPriceFood;
+}
 
-  //处理输入的菜品数据
+function getFoodInfos(selectedItems, foodInfos, allFood, allHalfPriceFood){
   selectedItems.map((value) => {
     let items = value.split("x");
     allFood.forEach(elem => {
       if(elem.id == items[0].trim()){
-        console.log(allHalfPriceFood)
-        FoodInfos.push({
+        foodInfos.push({
           name: elem.name,
           price: elem.price,
           count: items[1].trim(),
@@ -34,24 +38,27 @@ function bestCharge(selectedItems) {
       }
     });
   })
-  console.log(FoodInfos)
+}
+
+function createOrder(foodInfos){
+  let totalPrice = 0;
+  let orderDiscount1 = 0;
+  let orderDiscount2 = 0;
+  const halfPriceFood = [];
 
   let receipt = `============= 订餐明细 =============\n`
-  
-  //计算总价并统计优惠方案1
-  FoodInfos.forEach((value) => {
+
+  foodInfos.forEach((value) => {
     let oneFoodPrice = value.price * value.count;
     totalPrice += oneFoodPrice;
     receipt += `${value.name} x ${value.count} = ${parseInt(oneFoodPrice)}元\n`
 
-    //判断是否为半价菜品并计算折扣
     if(value.isHalfPriceFood){
       halfPriceFood.push(value.name);
       orderDiscount1 += value.price / 2;
     }
   })
 
-  //计算优惠方案2并比较
   if(totalPrice > 30){
     orderDiscount2 = 6;
     receipt += `-----------------------------------\n`;
@@ -74,6 +81,5 @@ function bestCharge(selectedItems) {
   receipt += `-----------------------------------\n`;
   receipt += `总计：${parseInt(totalPrice)}元\n`;
   receipt += `===================================\n`;
-
   return receipt;
 }
