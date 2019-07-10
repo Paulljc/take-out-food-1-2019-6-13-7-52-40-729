@@ -1,4 +1,6 @@
 const bestCharge = require('../src/best-charge')
+const loadAllItems = require('../src/items');
+const loadPromotions = require('../src/promotions');
 
 describe('Take out food', function () {
 
@@ -53,9 +55,24 @@ describe('Take out food', function () {
     }, {
       type: '指定菜品半价',
       items: ['ITEM0001', 'ITEM0022']
-    }];;
+    }];
     let summary = bestCharge.getAllHalfPriceFood(inputs);
     let expected = [{type: '指定菜品半价', items: ['ITEM0001', 'ITEM0022']}]
     expect(summary).toEqual(expected)
+  });
+
+  it('should get food Infomation by selected items', function() {
+    let inputs = ["ITEM0013 x 4"];
+    let foodInfos = [];
+    let allHalfPriceFood = [{type: '指定菜品半价', items: ['ITEM0001', 'ITEM0022']}];
+    const allFood = loadAllItems.loadAllItems();
+    bestCharge.getFoodInfos(inputs, foodInfos, allFood, allHalfPriceFood)
+    let expected = [{
+      name: '肉夹馍',
+      price: 6.00,
+      count: '4',
+      isHalfPriceFood: false
+    }];
+    expect(foodInfos).toEqual(expected)
   });
 });
