@@ -47,4 +47,15 @@ describe('Take out food', function () {
     expect(summary).toEqual(expected)
   });
 
+  it('should get all half price food by all promotions', function() {
+    let inputs = [{
+      type: '满30减6元'
+    }, {
+      type: '指定菜品半价',
+      items: ['ITEM0001', 'ITEM0022']
+    }];;
+    let summary = bestCharge.getAllHalfPriceFood(inputs);
+    let expected = [{type: '指定菜品半价', items: ['ITEM0001', 'ITEM0022']}]
+    expect(summary).toEqual(expected)
+  });
 });

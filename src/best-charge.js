@@ -87,4 +87,4 @@ function createOrder(foodInfos){
   return receipt;
 }
 
-module.exports = { bestCharge }
+module.exports = { bestCharge, getAllHalfPriceFood }
