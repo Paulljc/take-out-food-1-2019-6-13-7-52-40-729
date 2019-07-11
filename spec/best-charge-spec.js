@@ -75,4 +75,21 @@ describe('Take out food', function () {
     }];
     expect(foodInfos).toEqual(expected)
   });
+
+  it('should create order by food infomation', function() {
+    let inputs = [{
+      name: '肉夹馍',
+      price: 6.00,
+      count: '4',
+      isHalfPriceFood: false
+    }];;
+    let summary = bestCharge.createOrder(inputs).trim();    
+    let expected = `
+============= 订餐明细 =============
+肉夹馍 x 4 = 24元
+-----------------------------------
+总计：24元
+===================================`.trim()
+    expect(summary).toEqual(expected);
+  });
 });
